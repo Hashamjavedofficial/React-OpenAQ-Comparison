@@ -2,6 +2,7 @@ import React,{useEffect,useState} from 'react';
 import {Dimmer, Grid, Loader, Segment} from 'semantic-ui-react'
 
 import Inputs from "./components/Inputs";
+import BackDrop from "./components/Backdrop";
 import useInputs from "./hooks/useInputs";
 import {OpenQAApis} from "./Apis";
 
@@ -36,11 +37,7 @@ const App:React.FC = () =>  {
 
   return (
      <>
-         {isLoading && <Segment>
-             <Dimmer active>
-                 <Loader size='massive'>Loading</Loader>
-             </Dimmer>
-         </Segment>}
+         {isLoading && <BackDrop />}
        <div className='heading-container'>
          <h2>Air Quality Comparison</h2>
        </div>
