@@ -17,6 +17,7 @@ const Inputs :React.FC<Props> = (props)=>{
     const {countries,changeCountry,selectedCountry,selectedCity,changeCity,setIsLoading,params} = props
     const [cities,setCities] = useState<Cities[]>([])
     const [measurments,setMeasurments] = useState<any>({})
+    const [cityError,setCityError] = useState<string | null>(null)
 
     const filterParams = params.filter(function(item, pos) {
         return params.indexOf(item) === pos;
@@ -30,6 +31,7 @@ const Inputs :React.FC<Props> = (props)=>{
     }
 
     useEffect(()=>{
+        setCityError(null)
         setCities([])
         setMeasurments({})
         resetCity()
@@ -44,6 +46,7 @@ const Inputs :React.FC<Props> = (props)=>{
     },[selectedCountry])
 
     useEffect(()=>{
+        setCityError(null)
         setMeasurments({})
         setIsLoading(true)
         OpenQAApis.fetchMesurments(selectedCity).then((res:any)=>{
@@ -51,6 +54,8 @@ const Inputs :React.FC<Props> = (props)=>{
             setIsLoading(false)
         }).catch(()=>{
             setIsLoading(false)
+            if(cities.length > 0)
+                setCityError('No Data Available')
         })
     },[selectedCity])
 
@@ -75,6 +80,10 @@ const Inputs :React.FC<Props> = (props)=>{
             onChange={changeCity}
             value={selectedCity}
         />}
+
+        {cityError && <div className={'city-error-container'}>
+            <p>{cityError}</p>
+        </div>}
 
         {Object.keys(measurments).length > 0  && filterParams.map((measurment:string)=>(<div key={measurment}>
             <Divider horizontal>
